@@ -1,0 +1,20 @@
+
+
+<div  class="addfiledialog">
+    <h2>Add Required Documents</h2>
+    <select [(ngModel)]="selected" (selectionChange)="ReviewDocSelect($event)"  class="form-select cbselect"  multiple >
+        <option *ngFor="let a of ELEMENT_DATA | orderby : 'name'"  value={{a.id}}>{{a.name}}</option>
+    </select>
+    <div mat-dialog-actions align="center" >
+      <!-- <mat-dialog-actions> -->
+        <div class="mt-8">
+          <button mat-raised-button color="primary" tabindex="1" (click)="onOk()">Ok</button>
+          <button mat-raised-button color="primary" mat-dialog-close tabindex="-1" >Cancel</button>
+        </div>
+        
+      <!-- </mat-dialog-actions> -->
+    </div>
+  
+</div>
+
+

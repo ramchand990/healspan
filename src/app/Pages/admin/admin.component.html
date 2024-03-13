@@ -1,0 +1,35 @@
+<mat-form-field class="dropdown">
+    <mat-select placeholder="Select" (selectionChange)="onclick($event.value)">
+      <mat-option *ngFor="let data of tablelists" [value]="data.value">
+        {{data.viewValue}}
+      </mat-option>
+      
+    </mat-select>
+  </mat-form-field>&nbsp;&nbsp;&nbsp;
+  <button mat-raised-button color="primary" (click)="exportfile()">Go</button>
+
+
+
+
+  <table mat-table [dataSource]="exportTypes" class="mat-elevation-z8">
+    <ng-container *ngFor="let columnName of columnNames" [matColumnDef]="columnName">
+      <th mat-header-cell *matHeaderCellDef>{{(columnName) }}</th>
+
+      <td mat-cell *matCellDef="let element">{{ element[columnName] }}</td>      
+
+    
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Edit </mat-header-cell>
+      <mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Click to Edit" class="iconbutton"
+          color="primary" >
+          <mat-icon>edit</mat-icon>
+        </button> </mat-cell>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnNames"></tr>
+    
+    
+  </table>
+  

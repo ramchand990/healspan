@@ -1,0 +1,105 @@
+
+
+<div class="container-fluid">
+  <form [formGroup]="loginForm" (ngSubmit)="OnLogin()">
+    <div class="row text-center h-100">
+      <div class="col-md-6">
+        <div class="w-100  mt-20px loginhealspan">
+          <img class="img-fluid" src="/assets/img/Login.svg" height="500px">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-signin w-100 m-auto align-middle"
+          style="margin-top:15%!important; margin-bottom:10%!important;">
+
+          <h1 class="h3 mb-5 fw-normal">Login</h1>
+
+          <div class="form-floating mb-4">
+  
+              <input type="text" class="form-control form-control-sm" id="floatingInput" formControlName="username"
+                placeholder="name@example.com">
+              <label for="floatingInput">Login ID</label>
+              <span style="color:red;" *ngIf="username && username.invalid && username.touched">User Input Field Is
+                Not Valid
+              </span>
+     
+          </div>
+
+          <!-- <div class="form-floating mb-3">
+          
+              <input type="password" class="form-control form-control-sm" id="floatingPassword"
+                formControlName="password" placeholder="Password">
+              <label for="floatingPassword">Password</label>
+              <span style="color:red;" *ngIf="password && password.invalid && password.touched">Password Input
+                Field Is Not Valid </span>
+       
+          </div> -->
+
+          <div class="form-floating mb-3">
+            <input class="form-control form-control-sm left-addon" id="floatingInput" formControlName="password"
+              [type]="showPasswordOnPress ? 'text' : 'password'" id="password-field" placeholder="Password">
+            <label for="floatingInput">Password</label>
+            <div (mousedown)="showPasswordOnPress = !showPasswordOnPress"
+              (mouseup)="showPasswordOnPress = !showPasswordOnPress">
+              <i alt="show" class="fas fa-eye eye-show eye" [class.hide]="showPasswordOnPress"></i>
+              <i alt="hide" class="fas fa-eye-slash eye-hide eye" [class.hide]="!showPasswordOnPress"></i>
+            </div>
+            <span style="color:red;" *ngIf="password && password.invalid && password.touched">User Input Field Is
+              Not Valid
+            </span>
+          </div>
+
+          <div class="checkbox mb-3 text-end passtext">
+            <!-- <span><a href="" data-bs-toggle="modal" data-bs-target="#modalChoice">Having trouble logging
+                in</a></span><br> -->
+            <span><a href="" data-bs-toggle="modal" data-bs-target="#modalChoice">Forgot password / Login
+                ID</a></span>
+          </div>
+          <div class="form-group">
+            <button class="w-100 btn btn-lg btn-primary mt-5" type="submit" [disabled]="loginForm.invalid">Login </button>
+          </div>
+    
+          <p class="mt-5 mb-3 text-muted healeamil">Contact us: <a href="">info@healspan.com</a></p>
+
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+
+  <div class="modal" role="dialog" [ngStyle]="{'display':displayStyle}" id="modalChoice">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-header border-bottom-0 p-3 ">
+          <a type="button" class="btn-close" (click)="closepopup()" data-bs-dismiss="modal" aria-label="Close"><img
+              src="/assets/img/close-circle.png"></a>
+        </div>
+        <div class="modal-body p-4 text-center ptt">
+          <p class="mb-0 fs-5">Unable To Login</p>
+          <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Forgot password/Login ID</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" role="dialog" id="modalChoice3">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-body p-4 text-center">
+          <p class="mb-0 fs-5">The Login ID and Password is sent to the registered email ID</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="w-100 bgheal">
+    <div class="container">
+      <p class="float-end copyright text002">
+        © KR4U Technologies Service Private Limited . 
+      </p>
+    </div>
+  </footer>

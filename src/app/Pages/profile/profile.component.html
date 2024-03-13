@@ -1,0 +1,79 @@
+<div class="container" style="background-color:#f9feff;">
+	<div class="row mt-5 pt-3 pb-3">
+		<div class="col-md-8 p-5">
+			<div class="row">
+				<div class="col-md-2">
+					<img src="/assets/img/Ellipse41.png">
+				</div>
+				<div class="col-md-10 p-3">
+					<!-- <h3 class="float-start">Sri Sudharsanam Hospital, Avadi</h3> -->
+
+					<h3 class="float-start">{{hospitalName}}</h3>
+
+
+				</div>
+			</div>
+			<div class="row mt-5">
+				<h5><strong>About us</strong></h5>
+				<hr class="mx-2 mt-2 mb-2" style="width:90%;">
+				<p class="my-2 profiletxt" [innerHTML]="aboutusData"></p>
+			</div>
+
+			<div class="row mt-5">
+				<h5><strong>Members</strong></h5>
+				<hr class="mx-2 mt-2 mb-2" style="width:90%;">
+				<div class="row mb-5 mt-2" *ngFor="let a of contactDetails,let i = index">
+					<div class="col-md-2">
+						Contact {{i+1}}:
+					</div>
+					<div class="col-md-10" >
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-3"><strong>{{a.firstname}}</strong></p>
+								<span class="tblink"><img src="/assets/img/call.png"
+										style="margin-right:5px;">{{a.contact}}</span>
+							</div>
+							<div class="col-md-6" *ngIf="a.email!=null">
+								Email:
+								<p class="mt-3"><a href="">{{a.email}}</a></p>
+								
+							</div>
+						</div>
+						
+						
+					</div>
+
+				</div>
+
+
+
+			</div>
+
+
+
+
+		</div>
+		<div class="col-md-4 leftpart p-5 healshadow">
+			<h5 class="mb-3"><strong>Address</strong></h5>
+			<p class="mb-5">{{address}}</p>
+
+			<h5 class="mb-3"><strong>Contact Number</strong></h5>
+			<p class="mb-5">{{boardlineNumber}}</p>
+
+			<h5 class="mb-3"><strong>Email ID</strong></h5>
+			<p class="mb-5"><a href="">{{EmailId}}</a></p>
+
+			<h5 class="mb-3"><strong>GST number</strong></h5>
+			<p class="mb-5">{{GstNum}}</p>
+
+			<h5 class="mb-3"><strong>Hospital ID</strong></h5>
+			<p class="mb-5">{{hospitalId}}</p>
+			<hr>
+
+			<a class="healtbv text-center mx-3 pt-3 pb-3 w-100">Reset Password</a>
+		</div>
+
+	</div>
+
+
+</div>

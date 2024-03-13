@@ -1,0 +1,24 @@
+<!-- <h2 class="modal-title modal-header navpop" matDialogTitle>
+    {{title}}
+  </h2> -->
+  
+  <!-- <mat-dialog-content class="p-3 m-0">
+    <p>{{message}}</p>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="center" class="border-top m-0">
+    <button mat-button (click)="onConfirm()" class="btn btn-primary rounded-pill w-25"  >Yes</button>
+    <button mat-button (click)="onDismiss()" class="btn btn-danger-light btn-sm rounded-pill w-25 ms-3" >No</button>
+  
+    </mat-dialog-actions> -->
+
+    <h3 class="modal-title modal-header healspantheme py-2 px-3" matDialogTitle>
+      <strong>Please Confirm</strong>
+    </h3>
+      <mat-dialog-content class="py-2 px-3">
+        <p>{{message}}</p>
+      </mat-dialog-content>
+      <mat-dialog-actions align="center"  >
+        <button mat-raised-button class="btn btn-primary btn-sm rounded w-25" (click)="onConfirm()" tabindex="1">Yes</button>
+        <button  mat-raised-button class="btn btn-secondary btn-sm rounded w-25 ms-3" mat-dialog-close tabindex="-1" (click)="onDismiss()">No</button>
+      </mat-dialog-actions>

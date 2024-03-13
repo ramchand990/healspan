@@ -1,0 +1,20 @@
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <img src="/assets/img/Logo.png" class="float-end">   
+    </div>
+    <div class="offcanvas-body nopadding pdrl0">
+      <ul class="navbar-nav justify-content-end flex-grow-1 menutxt heallink">
+          <li class="nav-item">
+            <a class="nav-link heallink active" aria-current="page" href='{{activeurl}}' (click)="redirect()">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link heallink">Reports</a>
+          </li>
+          <li class="nav-item" *ngIf="usertype==2">
+            <a class="nav-link heallink" href="/profile" (click)="OnprofileSelect()">Profile</a>
+          </li>           
+      </ul>
+    </div>
+  </div>
+  
+  

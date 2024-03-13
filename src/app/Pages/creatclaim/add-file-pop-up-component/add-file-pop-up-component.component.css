@@ -1,0 +1,11 @@
+/* ::ng-deep .mat-dialog-actions{
+    margin-bottom: 0px !important;
+  } */
+
+  .addfiledialog{
+    padding: 15px !important;
+  }
+
+  .cbselect{
+    height: 237px !important;
+  }

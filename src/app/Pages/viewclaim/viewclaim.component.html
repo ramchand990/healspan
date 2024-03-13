@@ -1,0 +1,1234 @@
+<div class="container">
+
+	<div class="row mt-4 mb-2">
+		<div class="col-md-3">
+			<h3>Claim ID: <strong>{{ClaimInfo?.healspanClaimID}}</strong></h3>
+			<span></span>
+		</div>
+
+
+
+		<div class="col-md-9">
+			<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+				<a *ngIf="IsEdit" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+					[ngClass]="{'disabled': statusmaster != environment.PendingDocuments }"
+					(click)="GotoClaim(this.claimStageLinkId)">Edit Claim</a>
+			</ng-container>
+			<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.healspanUser">
+				<a *ngIf="IsEdit" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+					[ngClass]="{'disabled': statusmaster != environment.PendingHSApproval }"
+					(click)="GotoClaim(this.claimStageLinkId)">Edit Claim</a>
+			</ng-container>
+
+
+
+			<!-- Initial Stage & Enhance-->
+			<ng-container *ngIf="claimStageId == '1' ">
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(2)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Enhance</a>
+				</ng-container>
+
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(3)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Discharge</a>
+				</ng-container>
+
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(4)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Final Claim</a>
+				</ng-container>
+			</ng-container>
+
+			<!--  Enhance-->
+			<ng-container *ngIf=" claimStageId == '2'">
+
+
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(3)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Discharge</a>
+				</ng-container>
+
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(4)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Final Claim</a>
+				</ng-container>
+			</ng-container>
+
+			<!-- Discharge -->
+			<ng-container *ngIf="claimStageId == '3'">
+				<ng-container *ngIf="sessionStorage.getItem('usertype') == environment.hospitalUser">
+					<a (click)="GotoNextStage(4)" class="btn btn-primary btn-md px-5 float-end mt-3 mx-2"
+						[ngClass]="{'disabled': statusmaster != environment.Approved }">Final Claim</a>
+				</ng-container>
+			</ng-container>
+
+
+		</div>
+
+		<div></div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4 mb-3 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/user.png">
+				</div>
+				<div class="p-1 mt-1"><span>Name: </span>
+					<h5 class="mt-2"><strong>{{patientinfo?.firstName +'
+							'+ patientinfo?.middleName +' '+
+							patientinfo?.lastname}} &nbsp;</strong></h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-3 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/calendar.png">
+				</div>
+				<div class="p-1 mt-1"><span>Admission Date: </span>
+					<h5 class="mt-2">
+						<strong>{{patientinfo?.dateOfAdmission | date: 'dd/MM/yyyy'}} &nbsp;</strong>
+					</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-3 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/window_check.png">
+				</div>
+				<div class="p-1 mt-1"><span>Status: </span>
+					<h5 class="mt-2">
+						<strong>{{this.claimdetailData?.statusName}} &nbsp;</strong>
+					</h5>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-4 mb-5 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/Group.png">
+				</div>
+				<div class="p-1 mt-1"><span> Diagnosis: </span>
+					<ng-container *ngIf="medicalInfo == null">
+						<h5 class="mt-2"><strong><br></strong></h5>
+					</ng-container>
+					<ng-container *ngIf="medicalInfo != null">
+						<h5 class="mt-2">
+							<strong>{{medicalInfo?.diagnosisName}}&nbsp;</strong>
+						</h5>
+
+					</ng-container>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-5 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/calendar_x.png">
+				</div>
+				<div class="p-1 mt-1"><span>Discharge Date: </span>
+					<h5 class="mt-2">
+						<strong>{{patientinfo?.dateOfDischarge | date: 'dd/MM/yyyy'}}</strong>
+					</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-5 bg-body rounded">
+			<div class="healshadow p-2">
+				<div class="float-start p-2 m-1">
+					<img src="/assets/img/doughnut_chart.png">
+				</div>
+				<div class="p-1 mt-1"><span>Stage: </span>
+					<h5 class="mt-2">
+						<strong>{{this.claimdetailData?.claimStageMstName}}</strong>
+					</h5>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class="row">
+
+
+		<div class="d-flex align-items-start vtabborder p-0">
+			<div class="nav flex-column me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical"
+				style="border-right: 1px solid #E2E5E5;">
+				<li class="nav-item " role="presentation">
+					<button class="nav-link healspantabv vb1 active" id="contact-tab" data-bs-toggle="tab"
+						data-bs-target="#Insurance-Information" type="button" role="tab"
+						aria-controls="contact-tab-pane" aria-selected="false">Insurance Information</button>
+				</li>
+
+				<li class="nav-item" role="presentation">
+					<button class="nav-link healspantabv" id="home-tab" data-bs-toggle="tab"
+						data-bs-target="#Patient-Information" type="button" role="tab" aria-controls="home-tab-pane"
+						aria-selected="true">Patient Information</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link healspantabv" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#Medical-Information" type="button" role="tab" aria-controls="profile-tab-pane"
+						aria-selected="false">Medical Information</button>
+				</li>
+
+				<li class="nav-item" role="presentation">
+					<button class="nav-link healspantabv" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#Initial-Authorization" type="button" role="tab" (click)="tabclick('Initial')"
+						aria-controls="profile-tab-pane" aria-selected="false">Initial Authorization</button>
+				</li>
+				<li class="nav-item " role="presentation">
+					<button class="nav-link healspantabv" id="contact-tab" data-bs-toggle="tab"
+						data-bs-target="#Enhancement" type="button" role="tab" aria-controls="contact-tab-pane"
+						(click)="tabclick('Enhancement')" aria-selected="false">Enhancement</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link healspantabv" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#Discharge" type="button" role="tab" aria-controls="profile-tab-pane"
+						(click)="tabclick('Discharge')" aria-selected="false">Discharge</button>
+				</li>
+				<li class="nav-item " role="presentation">
+					<button class="nav-link healspantabv vb2" id="contact-tab" data-bs-toggle="tab"
+						data-bs-target="#Final-Claim" type="button" role="tab" aria-controls="contact-tab-pane"
+						(click)="tabclick('Final Claim')" aria-selected="false">Final Claim</button>
+				</li>
+
+				<a class="healtbv text-center mx-3 pt-3 pb-3 pointer" (click)="OnDownload()">Download</a>
+			</div>
+
+			<div class="tab-content w-100 pe-5 ms-3" id="v-pills-tabContent">
+
+				<!---------------------------------Patient-Information--------------------------->
+				<div class="tab-pane fade" id="Patient-Information" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+					<div class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Name: </span>
+									<h5 class="mt-3 f16"><strong>{{patientinfo?.firstName +' '+
+											patientinfo?.middleName +' '+ patientinfo?.lastname}}</strong></h5>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Age: </span>
+									<h5 class="mt-3 f16"><strong>{{patientinfo?.age}}</strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Gender: </span>
+									<h5 class="mt-3 f16"><strong>{{patientinfo?.gender}}</strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<h5 class="mt-3 f16 float-end"><strong style="color: #00B272;"></strong>
+										<!-- {{patientinfo.Status}} -->
+									</h5>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+					<div class="row mb-2">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Date of Birth: </span>
+									<h5 class="mt-3 f16"><strong>{{patientinfo?.dateBirth |
+											date: 'dd/MM/yyyy'}}</strong></h5>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01"> </span>
+									<h5 class="mt-3 f16"><strong></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01"> </span>
+									<h5 class="mt-3 f16"><strong></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<h5 class="mt-3 f16 float-end"><strong style="color: #00B272;"></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+				</div>
+
+
+				<!---------------------------------Medical-Information--------------------------->
+				<div class="tab-pane fade" id="Medical-Information" role="tabpanel"
+					aria-labelledby="v-pills-profile-tab">
+
+					<div class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Procedure:</span>
+									<h5 class="mt-3 f16"><strong>{{medicalInfo?.procedureName}}</strong></h5>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Treatment Type </span>
+									<h5 class="mt-3 f16"><strong>{{medicalInfo?.treatmentTypeName}}</strong>
+									</h5>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Speciality:</span>
+									<ng-container *ngIf="medicalInfo != null">
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.specialityName}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<h5 class="mt-3 f16 float-end"><strong style="color: #00B272;"></strong>
+										<!-- {{patientinfo.Status}} -->
+									</h5>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">DateOfFirstDiagnosis:</span>
+									<ng-container *ngIf="medicalInfo != null">
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.dateOfFirstDiagnosis |
+												date: 'dd/MM/yyyy'}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<div class="p-1 mt-1"><span class="cl01">DoctorName:</span>
+									<ng-container *ngIf="medicalInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.doctorName}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<div class="p-1 mt-1"><span class="cl01">DoctorRegistrationNumber:</span>
+									<ng-container *ngIf="medicalInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.doctorRegistrationNumber}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<div class="p-1 mt-1"><span class="cl01">DoctorQualification:</span>
+									<ng-container *ngIf="medicalInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.doctorQualification}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+					<div class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<div class="p-1 mt-1"><span class="cl01">Comments</span>
+									<ng-container *ngIf="medicalInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{medicalInfo?.comments}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div *ngIf="questionList?.length>0" class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Questionnaire</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01"></span>
+									<h5 class="mt-3 f16"><strong></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<h5 class="mt-3 f16 float-end"><strong style="color: #00B272;"></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+				</div>
+				<!------------------Insurance-Information---------------------------- -->
+				<div class="tab-pane fade show active" id="Insurance-Information" role="tabpanel"
+					aria-labelledby="v-pills-messages-tab">
+
+					<div class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Insurance Company: </span>
+									<ng-container *ngIf="insuranceInfo != null">
+										<h5 class="mt-3 f16">
+											<strong>{{insuranceInfo?.insuranceCompanyName}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">TPA: </span>
+									<ng-container *ngIf="insuranceInfo != null">
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.tpaName}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">TPA ID Card No:</span>
+									<ng-container *ngIf="insuranceInfo != null">
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.tpaIdCardNumber}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<ng-container *ngIf="claimInfo != null && claimInfo.tpaClaimNumber != null">
+									<div class="p-1 mt-1"><span class="cl01">TPA Claim Number:</span>
+										<h5 class="mt-3 f16"><strong>{{claimInfo?.tpaClaimNumber}}</strong></h5>
+									</div>
+								</ng-container>
+							</div>
+						</div>
+						<!-- <div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<ng-container *ngIf="insuranceInfo != null">
+
+										<h5 class="mt-3 f16 float-end"><strong
+												style="color: #00B272;">{{insuranceInfo.Status}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+							</div>
+						</div> -->
+
+
+
+					</div>
+
+
+					<div class="row mt-1 pt-3">
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Relation: </span>
+									<ng-container *ngIf="insuranceInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.relationshipName}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Policy Holder:</span>
+									<ng-container *ngIf="insuranceInfo != null">
+
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.policyHolderName}}</strong></h5>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+
+								<div class="p-1 mt-1">
+									<h5 class="mt-3 f16 float-end"><strong style="color: #00B272;"></strong></h5>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+					<div class="row mt-1 pt-3">
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<ng-container *ngIf="insuranceInfo != null">
+									<div *ngIf="insuranceInfo.isGroupPolicy" class="p-1 mt-1"><span class="cl01">Group
+											Policy</span>
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.isGroupPolicy}}</strong></h5>
+									</div>
+								</ng-container>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<ng-container *ngIf="insuranceInfo != null">
+									<div *ngIf="insuranceInfo.isGroupPolicy" class="p-1 mt-1"><span class="cl01">Company
+											/ Corporate / Group : </span>
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.groupCompany}}</strong></h5>
+									</div>
+								</ng-container>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3 bg-body rounded">
+							<div class="p-2">
+								<ng-container *ngIf="insuranceInfo != null">
+									<div *ngIf="insuranceInfo.isGroupPolicy" class="p-1 mt-1"><span
+											class="cl01">EmployeeID :</span>
+										<h5 class="mt-3 f16"><strong>{{insuranceInfo?.groupCompanyEmpId}}</strong></h5>
+									</div>
+								</ng-container>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+
+
+				<!-----------------------------------Initial-Authorization-------------------------- -->
+				<div class="tab-pane fade" id="Initial-Authorization" role="tabpanel"
+					aria-labelledby="v-pills-home-tab">
+
+					<div class="row mt-3">
+						<h5><strong>Documents :</strong></h5>
+						<div class="col-md-6 fixTableHead">
+
+
+							<ng-container *ngIf="medicalInfo != null">
+
+								<div class="row mb-3 bg-body rounded" *ngFor="let h of InitialDoc ,let i = index ">
+
+									<div class="col-md-6">
+										<div class="px-3">
+											<h5 class="mt-3 f16"><strong>Document {{i+1}}:</strong></h5>
+											<h5 *ngIf="h.documentPath != null" class="mt-3 f16"><a class="doc"
+													href="javascript:void(0)"
+													(click)="docopen(h.id,h.mandatoryDocumentName)">{{h.mandatoryDocumentName}}</a></h5>
+											<h5 *ngIf="h.documentPath == null" class="mt-3 f16"><a
+													class="doc">{{h.mandatoryDocumentName}}</a></h5>
+
+
+										</div>
+
+									</div>
+									<div *ngIf="h.documentPath == null" class="col-md-6">
+										<a class="disabled btn btn-primary btn-sm px-3 mt-5 healshadow"> Pending
+										</a>
+									</div>
+									<div *ngIf="h.documentPath != null" class="col-md-3">
+
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Uploaded </a>
+
+									</div>
+
+									<!-- <div *ngIf="h.documentPath != null" class="col-md-3 mt-5 ms-0">
+
+										<a class="btn  " (click)="PreviewDoc(h.id)" matTooltip="Preview Document"
+											data-bs-toggle="modal" data-bs-target="#exampleModal3"><img
+												src="/assets/img/Document.png"></a>
+
+									</div> -->
+
+
+								</div>
+
+							</ng-container>
+						</div>
+						<div class="col-md-2 mb-3 bg-body rounded">
+							<div class="px-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Estimated Cost: </span>
+									<ng-container *ngIf="patientinfo != null">
+										<h5 class="mt-3 f16"><strong>INR {{patientinfo?.initialCostEstimate}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-1"><span class="cl01">Approval Cost: </span>
+									<ng-container *ngIf="insuranceInfo.approvedInitialAmount != null">
+										<h5 class="mt-3 f16"><strong>INR
+												{{insuranceInfo?.approvedInitialAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="row mt-5">
+						<div class="col-md-6">
+							<ng-container *ngIf="initialQuery != null">
+
+								<h5><strong>Review Note : </strong></h5>
+
+								<div class="row" *ngFor="let a of initialQuery,let i = index ">
+									<div class="col-md-6">
+										<h5><strong>Query
+												{{i+1}}:</strong> {{a.comments}}</h5>
+									</div>
+									<div class="col-md-6">
+										<h5>{{a.assignedDateTime | date:'dd-MM-YYYY
+											hh:mm a'}}</h5>
+									</div>
+
+
+								</div>
+
+							</ng-container>
+						</div>
+
+						<div class="col-md-6" *ngIf="initialTpaQuery!=null">
+							<h5><strong>TPA Note </strong>
+								<ng-container>
+									<img src="./assets/img/info.svg" width="25" [matTooltip]="getTooltipText()"
+										matTooltipPosition="after">
+
+
+
+								</ng-container>
+							</h5>
+						</div>
+
+
+					</div>
+
+				</div>
+				<div class="tab-pane fade" id="Enhancement" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+					<div class="row mt-3">
+						<h5><strong>Documents :</strong></h5>
+						<div style='width: 500px; height:250px; ' class="col-md-6 fixTableHead">
+							<ng-container *ngIf="medicalInfo != null">
+
+								<div class="row mb-3 bg-body rounded" *ngFor="let h of EnhancmentDoc ,let i = index ">
+
+									<div class="col-md-6">
+										<div class="px-3">
+											<h5 class="mt-3 f16"><strong>Document {{i+1}}:</strong></h5>
+											<h5 *ngIf="h.documentPath != null" class="mt-3 f16"><a class="doc"
+													href="javascript:void(0)"
+													(click)="docopen(h.id,h.mandatoryDocumentName)">{{h.mandatoryDocumentName}}</a></h5>
+											<h5 *ngIf="h.documentPath == null" class="mt-3 f16"><a
+													class="doc">{{h.mandatoryDocumentName}}</a></h5>
+
+
+										</div>
+
+									</div>
+									<div *ngIf="h.documentPath == null" class="col-md-6">
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Pending <img> </a>
+									</div>
+									<div *ngIf="h.documentPath != null" class="col-md-6">
+
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Uploaded <img> </a>
+
+									</div>
+
+									<!-- <div *ngIf="h.documentPath != null" class="col-md-3 mt-5 ms-0">
+
+										<a class="btn  " (click)="PreviewDoc(h.id)" matTooltip="Preview Document"
+											data-bs-toggle="modal" data-bs-target="#exampleModal3"><img
+												src="/assets/img/Document.png"></a>
+
+									</div> -->
+
+								</div>
+							</ng-container>
+						</div>
+
+						<div class="col-md-2 mb-3 bg-body rounded">
+							<div class="px-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Enhancement Cost: </span>
+									<ng-container *ngIf="patientinfo.enhancementEstimate != null">
+										<h5 class="mt-3 f16"><strong>INR {{patientinfo.enhancementEstimate}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-3"><span class="cl01">Approval Cost: </span>
+									<ng-container *ngIf="insuranceInfo.approvedEnhancementsAmount != null">
+										<h5 class="mt-3 f16">
+											<strong>INR {{insuranceInfo.approvedEnhancementsAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+
+							</div>
+						</div>
+						<div class="row mt-5">
+							<div class="col-md-6">
+								<ng-container *ngIf="enhanceQuery != null">
+
+									<h5><strong>Review Note : </strong></h5>
+
+									<div class="row" *ngFor="let a of enhanceQuery,let i = index ">
+										<div class="col-md-6">
+											<h5><strong>Query
+													{{i+1}}:</strong> {{a.comments}}</h5>
+										</div>
+										<div class="col-md-6">
+											<h5>{{a.assignedDateTime | date:'dd-MM-YYYY
+												hh:mm a'}}</h5>
+										</div>
+
+
+									</div>
+
+								</ng-container>
+							</div>
+
+							<div class="col-md-6" *ngIf="enhanceTpaQuery!=null">
+								<h5><strong>TPA Note </strong>
+									<ng-container>
+										<img src="./assets/img/info.svg" width="25" [matTooltip]="getTooltipText()"
+											matTooltipPosition="after">
+
+
+
+									</ng-container>
+								</h5>
+							</div>
+
+
+
+						</div>
+
+
+					</div>
+
+				</div>
+
+				<div class="tab-pane fade" id="Discharge" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+
+					<div class="row mt-3">
+						<h5><strong>Documents :</strong></h5>
+						<div style='width: 500px; height:250px; ' class="col-md-6 fixTableHead">
+							<ng-container *ngIf="medicalInfo != null">
+								<div class="row mb-3 bg-body rounded" *ngFor="let h of DischargeDoc ,let i = index ">
+
+									<div class="col-md-6">
+										<div class="px-3">
+											<h5 class="mt-3 f16"><strong>Document {{i+1}}:</strong></h5>
+											<h5 *ngIf="h.documentPath != null" class="mt-3 f16"><a class="doc"
+													href="javascript:void(0)"
+													(click)="docopen(h.id,h.mandatoryDocumentName)">{{h.mandatoryDocumentName}}</a></h5>
+											<h5 *ngIf="h.documentPath == null" class="mt-3 f16"><a
+													class="doc">{{h.mandatoryDocumentName}}</a></h5>
+										</div>
+
+									</div>
+									<div *ngIf="h.documentPath == null" class="col-md-6">
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Pending <img> </a>
+									</div>
+									<div *ngIf="h.documentPath != null" class="col-md-6">
+
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Uploaded <img> </a>
+
+									</div>
+									<!-- <div *ngIf="h.documentPath != null" class="col-md-3 mt-5 ms-0">
+
+										<a class="btn  " (click)="PreviewDoc(h.id)" matTooltip="Preview Document"
+											data-bs-toggle="modal" data-bs-target="#exampleModal3"><img
+												src="/assets/img/Document.png"></a>
+
+									</div> -->
+
+								</div>
+							</ng-container>
+						</div>
+						<div class="col-md-2 mb-3 bg-body rounded">
+							<div class="px-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Bill Amount: </span>
+									<ng-container *ngIf="patientinfo.finalBillAmount != null">
+
+										<h5 class="mt-3 f16"><strong>INR {{patientinfo.finalBillAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-3"><span class="cl01">Claim Amount: </span>
+									<ng-container *ngIf="patientinfo.claimedAmount != null">
+										<h5 class="mt-3 f16">
+											<strong>INR {{patientinfo.claimedAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-3"><span class="cl01">Approved Amount: </span>
+									<ng-container *ngIf="insuranceInfo.approvedAmountAtDischarge != null">
+										<h5 class="mt-3 f16">
+											<strong>INR {{insuranceInfo.approvedAmountAtDischarge}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+
+							</div>
+						</div>
+						<div class="row mt-5">
+							<div class="col-md-6">
+								<ng-container *ngIf="dischargeQuery != null">
+
+									<h5><strong>Review Note : </strong></h5>
+
+									<div class="row" *ngFor="let a of dischargeQuery,let i = index ">
+										<div class="col-md-6">
+											<h5><strong>Query
+													{{i+1}}:</strong> {{a.comments}}</h5>
+										</div>
+										<div class="col-md-6">
+											<h5>{{a.assignedDateTime | date:'dd-MM-YYYY
+												hh:mm a'}}</h5>
+										</div>
+
+
+									</div>
+
+								</ng-container>
+							</div>
+
+							<div class="col-md-6" *ngIf="dischargeTpaQuery!=null">
+								<h5><strong>TPA Note </strong>
+									<ng-container>
+										<img src="./assets/img/info.svg" width="25" [matTooltip]="getTooltipText()"
+											matTooltipPosition="after">
+
+
+
+									</ng-container>
+								</h5>
+							</div>
+
+
+						</div>
+
+					</div>
+				</div>
+				<div class="tab-pane fade" id="Final-Claim" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+					<div class="row mt-3">
+						<h5><strong>Documents :</strong></h5>
+						<div style='width: 500px; height:250px; ' class="col-md-6 fixTableHead">
+							<ng-container *ngIf="medicalInfo != null">
+								<div class="row mb-3 bg-body rounded" *ngFor="let h of FinalDoc ,let i = index ">
+									<div class="col-md-6">
+										<div class="px-3">
+											<h5 class="mt-3 f16"><strong>Document {{i+1}}:</strong></h5>
+											<h5 *ngIf="h.documentPath != null" class="mt-3 f16"><a class="doc"
+													href="javascript:void(0)"
+													(click)="docopen(h.id,h.mandatoryDocumentName)">{{h.mandatoryDocumentName}}</a></h5>
+											<h5 *ngIf="h.documentPath == null" class="mt-3 f16"><a
+													class="doc">{{h.mandatoryDocumentName}}</a></h5>
+
+
+										</div>
+
+									</div>
+									<div *ngIf="h.documentPath == null" class="col-md-6">
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Pending <img> </a>
+									</div>
+									<div *ngIf="h.documentPath != null" class="col-md-6">
+
+										<a class="btn btn-primary btn-sm px-3 mt-5 healshadow"> Uploaded <img> </a>
+
+									</div>
+									<!-- <div *ngIf="h.documentPath != null" class="col-md-3 mt-5 ms-0">
+
+										<a class="btn  " (click)="PreviewDoc(h.id)" matTooltip="Preview Document"
+											data-bs-toggle="modal" data-bs-target="#exampleModal3"><img
+												src="/assets/img/Document.png"></a>
+
+									</div> -->
+								</div>
+							</ng-container>
+						</div>
+
+
+
+
+
+						<div class="col-md-2 mb-3 bg-body rounded">
+							<div class="px-2">
+
+								<div class="p-1 mt-1"><span class="cl01">Bill Amount: </span>
+									<ng-container *ngIf="patientinfo.finalBillAmount != null">
+
+										<h5 class="mt-2 f16"><strong>INR
+												{{patientinfo.finalBillAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-4"><span class="cl01">Claim Amount: </span>
+									<ng-container *ngIf="patientinfo.claimedAmount != null">
+										<h5 class="mt-2 f16">
+											<strong>INR {{patientinfo.claimedAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-4"><span class="cl01">Approved Amount: </span>
+									<ng-container *ngIf="insuranceInfo.approvalAmountFinalStage != null">
+										<h5 class="mt-2 f16">
+											<strong>INR {{insuranceInfo.approvalAmountFinalStage}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+								<div class="p-1 mt-4"><span class="cl01">Settled Amount: </span>
+									<ng-container *ngIf="insuranceInfo.settledAmount != null">
+										<h5 class="mt-2 f16">
+											<strong>INR {{insuranceInfo.settledAmount}}</strong>
+										</h5>
+									</ng-container>
+								</div>
+
+							</div>
+						</div>
+						<div class="row mt-5">
+							<div class="col-md-6">
+								<ng-container *ngIf="finalclaimQuery != null">
+
+									<h5><strong>Review Note : </strong></h5>
+
+									<div class="row" *ngFor="let a of finalclaimQuery,let i = index ">
+										<div class="col-md-6">
+											<h5><strong>Query
+													{{i+1}}:</strong> {{a.comments}}</h5>
+										</div>
+										<div class="col-md-6">
+											<h5>{{a.assignedDateTime | date:'dd-MM-YYYY
+												hh:mm a'}}</h5>
+										</div>
+
+
+									</div>
+
+								</ng-container>
+							</div>
+
+							<div class="col-md-6" *ngIf="finalclaimTpaQuery!=null">
+								<h5><strong>TPA Note </strong>
+									<ng-container>
+										<img src="./assets/img/info.svg" width="25" [matTooltip]="getTooltipText()"
+											matTooltipPosition="after">
+
+
+
+									</ng-container>
+								</h5>
+							</div>
+
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
+		<!-- <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<h2>Document Preview</h2>
+					<div class="pdf-container">
+						<iframe width="100%" height="500" frameBorder="0" [src]="urlSafe"></iframe>
+					</div>
+				</div>
+			</div>
+		</div> -->
+	</div>
+
+	<div class="row">
+		<div class="col-md-4 mb-2">
+			<a *ngIf="sessionStorage.getItem('usertype') == '3'" type="button"
+				class="btn btn-primary btn-md px-5 float-start mt-3 mx-2" data-bs-toggle="modal"
+				[ngClass]="{'disabled': statusmaster == environment.PendingDocuments || statusmaster == environment.PendingTPAApproval || statusmaster == environment.Approved || statusmaster == environment.Rejected}"
+				data-bs-target="#exampleModal">Query</a>
+		</div>
+
+		<div class="col-md-4 mb-2 " style="text-align: center;">
+			<a *ngIf="sessionStorage.getItem('usertype') == '3' &&  statusmaster == environment.PendingTPAApproval  "
+				type="button" class="btn btn-primary btn-md px-5 mt-3 mx-2" data-bs-toggle="modal"
+				data-bs-target="#exampleModal2">TPA Action</a>
+
+			<ng-container *ngIf="claimStageId == '4'">
+				<a *ngIf="sessionStorage.getItem('usertype') == '3' &&  statusmaster == environment.Approved  "
+					type="button" class="btn btn-primary btn-md px-5 mt-3 mx-2" data-bs-toggle="modal"
+					data-bs-target="#exampleModal2">TPA Action</a>
+			</ng-container>
+		</div>
+
+		<div class="col-md-4 mb-2">
+			<a *ngIf="sessionStorage.getItem('usertype') == '3'"
+				[ngClass]="{'disabled': statusmaster != environment.PendingHSApproval}"
+				class="btn btn-primary btn-md px-5 float-end mt-3 mx-2" (click)="approveClick()">Approve</a>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form [formGroup]="QueryForm">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="exampleFormControlTextarea1" class="form-label">Review Note*</label>
+						<textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="Review" rows="3"
+							formControlName="QueryRemark" placeholder="Please Give A Review"
+							[class.is-invalid]="Q['QueryRemark'].invalid && (Q['QueryRemark'].dirty || Q['QueryRemark'].touched)"
+							required></textarea>
+					</div>
+
+					<select [(ngModel)]="selected" class="form-control" class="form-select"
+						(selectionChange)="ReviewDocSelect($event)" formControlName="RevDoc" multiple required>
+						<option *ngFor="let a of manadtorydoc" value={{a.id}}>{{a.name}}</option>
+					</select>
+
+
+					<span class="float-end w-100">*All mandatory fields must be filled to send a query</span>
+
+					<div class="row">
+						<div class="col-md-12 mt-3">
+							<a href="" class="btn btn-primary btn-lg float-front" data-bs-toggle="modal"
+								data-bs-target="#exampleModal"> Cancel
+							</a>
+
+							<!-- <button href="" class="btn btn-primary btn-lg float-end" data-bs-toggle="modal"
+								[disabled]="!QueryForm.valid"	data-bs-target="#exampleModal" (click)="onSend(QueryForm)"> Send
+								</button> -->
+
+							<button href="" class="btn btn-primary btn-lg float-end" data-bs-toggle="modal"
+								[disabled]="!QueryForm.valid" data-bs-target="#exampleModal"
+								(click)="onSend(QueryForm)"> Send
+							</button>
+						</div>
+					</div>
+
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-body">
+				<form [formGroup]="TpaForm">
+
+					<div class="healshadow p-2">
+						<div class="row">
+							<label class="form-check-label" for="flexCheckDefault">
+								TPA Actions
+							</label>
+							<div class="col-md-3 mt-3">
+								<div class="form-check">
+									<input type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+										(change)="queryChange($event,'Query')" checked>
+									<label class="form-check-label" for="flexCheckDefault">
+										&nbsp;&nbsp;Query
+									</label>
+
+
+								</div>
+
+							</div>
+							<div class="col-md-3 mt-3">
+								<div class="form-check">
+									<input type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+										(change)="approveChange($event,'APPROVED')">
+									<label class="form-check-label" for="flexCheckDefault">
+										&nbsp;Approve
+									</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-3">
+								<div class="form-check">
+									<input type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+										(change)="rejectChange($event,'REJECTED')">
+									<label class="form-check-label" for="flexCheckDefault">
+										&nbsp;&nbsp;Reject
+									</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-3" *ngIf="StageName== 'Final Claim'">
+								<div class="form-check">
+									<input type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+										(change)="settleChange($event,'Settled')">
+									<label class="form-check-label" for="flexCheckDefault">
+										&nbsp;&nbsp;Settle
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row mt-4">
+
+						<div class="form-group col-md-6  mt-3">
+							<label for="" class="form-label float-start">TPA Claim No:</label>
+							<input type="text" class="form-control" formControlName="TpaClaimNo"
+								[class.is-invalid]="M['TpaClaimNo'].invalid && (M['TpaClaimNo'].dirty || M['TpaClaimNo'].touched)">
+
+						</div>
+					</div>
+					<div class="row mt-4" [hidden]="!IsApprove">
+
+						<div class="form-group col-md-6  mt-3">
+							<label for="" class="form-label float-start">Approve Amount :</label>
+							<input type="number" class="form-control" formControlName="ApproveAmount"
+							(keypress)="numericOnly($event)"	[class.is-invalid]="M['ApproveAmount'].invalid && (M['ApproveAmount'].dirty || M['ApproveAmount'].touched)">
+
+						</div>
+					</div>
+					<div class="row mt-4" [hidden]="!IsSettled">
+
+						<div class="form-group col-md-6  mt-3">
+							<label for="" class="form-label float-start">Settled Amount :</label>
+							<input type="number" class="form-control" formControlName="SettledAmount"
+							(keypress)="numericOnly($event)"	[class.is-invalid]="M['SettledAmount'].invalid && (M['SettledAmount'].dirty || M['SettledAmount'].touched)">
+
+						</div>
+					</div>
+					<div class="row mt-4">
+						<div class="mb-3">
+							<label for="" class="form-label float-start">Remark:</label>
+							<textarea class="form-control" id="exampleFormControlTextarea1" formControlName="Remark"
+								rows="3"
+								[class.is-invalid]="M['Remark'].invalid && (M['Remark'].dirty || M['Remark'].touched)"
+								placeholder="Please Give A Remark"></textarea>
+						</div>
+					</div>
+					<div>
+						<button href="" class="btn btn-primary btn-lg float-end" data-bs-toggle="modal"
+							[disabled]="!TpaForm.valid" data-bs-target="#exampleModal2" (click)="OnTpaSubmit(TpaForm)">
+							Submit
+						</button>
+					</div>
+
+
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
